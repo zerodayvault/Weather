@@ -62,21 +62,21 @@ function getRussianDayName(dateStr: string): string {
   return days[d.getDay()] || "Ср";
 }
 
-// Client-side Direct Fetch for Autocomplete
-async function fetchWithProxyFallback(url: string): Promise<Response> {
+// Check if IP is from Russia and prompt for VPN
+async function checkVpnRequired(): Promise<void> {
   try {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 3500); // 3.5s timeout
-    const res = await fetch(url, { signal: controller.signal });
-    clearTimeout(id);
-    if (!res.ok) throw new Error("API Error");
-    return res;
+    const res = await fetch("https://api.country.is/");
+    if (res.ok) {
+      const data = await res.json();
+      if (data.country === "RU" || data.country === "BY") {
+        throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокирровки.");
+      }
+    }
   } catch (err) {
-    console.warn("Direct fetch failed, falling back to proxy...", err);
-    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxyUrl);
-    if (!res.ok) throw new Error("Proxy Error");
-    return res;
+    if (err instanceof Error && err.message.includes("VPN")) {
+      throw err;
+    }
+    // Ignore other country check errors
   }
 }
 
@@ -85,10 +85,15 @@ export async function fetchAutocompleteFromClient(query: string): Promise<CitySu
     return [];
   }
 
+  await checkVpnRequired();
+
   const trimmedQuery = query.trim();
   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(trimmedQuery)}&count=10&language=ru&format=json`;
   
-  const response = await fetchWithProxyFallback(url);
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокирровки.");
+  }
   
   const data = await response.json();
   if (data.results && Array.isArray(data.results)) {
@@ -104,9 +109,14 @@ export async function fetchAutocompleteFromClient(query: string): Promise<CitySu
 
 // Client-side Direct Fetch for Weather details
 export async function fetchWeatherFromClient(city: string): Promise<WeatherData> {
+  await checkVpnRequired();
+
   // Step A: Geocode city name to get lat and lon
   const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city.trim())}&count=1&language=ru&format=json`;
-  const geoRes = await fetchWithProxyFallback(geoUrl);
+  const geoRes = await fetch(geoUrl);
+  if (!geoRes.ok) {
+    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокирровки.");
+  }
 
   const geoData = await geoRes.json();
   if (!geoData.results || geoData.results.length === 0) {
@@ -121,7 +131,10 @@ export async function fetchWeatherFromClient(city: string): Promise<WeatherData>
 
   // Step B: Fetch Weather Forecast
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,cloud_cover,visibility&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum&wind_speed_unit=ms&timezone=auto`;
-  const weatherRes = await fetchWithProxyFallback(weatherUrl);
+  const weatherRes = await fetch(weatherUrl);
+  if (!weatherRes.ok) {
+    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокирровки.");
+  }
 
   const weatherData = await weatherRes.json();
   const currentObj = weatherData.current;

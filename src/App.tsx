@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { toPng } from "html-to-image";
 import { 
   Sun, 
   Moon, 
@@ -8,7 +9,8 @@ import {
   AlertCircle,
   HelpCircle,
   Activity,
-  CloudLightning
+  CloudLightning,
+  Share2
 } from "lucide-react";
 import { WeatherData } from "./types";
 import { fetchWeatherFromClient } from "./utils/weatherClientFallback";
@@ -24,6 +26,9 @@ export default function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
+  const weatherCardRef = useRef<HTMLDivElement>(null);
+  const shareCardRef = useRef<HTMLDivElement>(null);
   const [unit, setUnit] = useState<"C" | "F">("C");
 
   // Load Saved Cities
@@ -136,6 +141,39 @@ export default function App() {
       return `${Math.round((celsius * 9) / 5 + 32)}°`;
     }
     return `${Math.round(celsius)}°`;
+  };
+
+  const handleShare = async () => {
+    if (!weather) return;
+
+    // Generate Text Summary
+    const textSummary = `Погода: ${weather.city}, ${formatRawTemp(weather.current.temp)}${unit}, ${weather.current.conditionCode}`;
+    
+    try {
+      await navigator.clipboard.writeText(textSummary);
+    } catch (err) {
+      console.warn("Failed to copy text", err);
+    }
+
+    // Generate PNG
+    if (shareCardRef.current) {
+      try {
+        const dataUrl = await toPng(shareCardRef.current, {
+          quality: 0.95,
+        });
+        const link = document.createElement("a");
+        link.download = `oleg-weather-${weather.city.toLowerCase()}.png`;
+        link.href = dataUrl;
+        link.click();
+        
+        setShareMessage("Картинка и текст скопированы!");
+        setTimeout(() => setShareMessage(null), 3000);
+      } catch (err) {
+        console.error("Failed to generate image", err);
+        setShareMessage("Текст скопирован!");
+        setTimeout(() => setShareMessage(null), 3000);
+      }
+    }
   };
 
   return (
@@ -272,6 +310,7 @@ export default function App() {
                 {/* Current Weather Highlight Card - iOS Apple Weather inspired */}
                 <div 
                   id="main-weather-card"
+                  ref={weatherCardRef}
                   className="pt-10 pb-12 px-6 sm:px-10 glass-card rounded-[36px] shadow-xl relative overflow-hidden theme-transition border-t-0 flex flex-col items-center justify-center text-center group"
                 >
                   {/* Dynamic Apple-style weather background glow */}
@@ -316,15 +355,25 @@ export default function App() {
                       {new Date().toLocaleDateString("ru-RU", { weekday: "short", day: "numeric", month: "short" })}
                     </span>
 
-                    {/* Refresh on the right */}
-                    <button
-                      onClick={() => fetchWeather(weather.city)}
-                      id="refresh-weather-btn"
-                      className="p-2.5 rounded-full bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/60 dark:border-slate-700/50 text-slate-550 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-sm active:scale-95 transition-all duration-300"
-                      title="Обновить данные"
-                    >
-                      <RefreshCw className="w-4.5 h-4.5 active:rotate-180 transition-transform duration-500" />
-                    </button>
+                    {/* Refresh & Share on the right */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleShare}
+                        id="share-weather-btn"
+                        className="p-2.5 rounded-full bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/60 dark:border-slate-700/50 text-slate-550 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-sm active:scale-95 transition-all duration-300"
+                        title="Поделиться"
+                      >
+                        <Share2 className="w-4.5 h-4.5" />
+                      </button>
+                      <button
+                        onClick={() => fetchWeather(weather.city)}
+                        id="refresh-weather-btn"
+                        className="p-2.5 rounded-full bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/60 dark:border-slate-700/50 text-slate-550 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-sm active:scale-95 transition-all duration-300"
+                        title="Обновить данные"
+                      >
+                        <RefreshCw className="w-4.5 h-4.5 active:rotate-180 transition-transform duration-500" />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Centered Apple Weather Info */}
@@ -384,10 +433,59 @@ export default function App() {
         </div>
       </main>
 
+      {/* Hidden 1x1 Share Element */}
+      {weather && (
+        <div className="fixed top-[-9999px] left-[-9999px] pointer-events-none z-[-1000]">
+          <div 
+            ref={shareCardRef}
+            className="w-[500px] h-[500px] bg-gradient-to-br from-[#00c6ff] to-[#0072ff] flex flex-col items-center justify-center text-white relative overflow-hidden font-sans"
+          >
+             {/* Background flares */}
+             <div className="absolute top-[-20%] right-[-10%] w-[70%] h-[70%] bg-white/20 blur-[80px] rounded-full"></div>
+             <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-400/30 blur-[60px] rounded-full"></div>
+
+             <h2 className="text-3xl font-extrabold uppercase tracking-widest mb-1 opacity-90 drop-shadow-sm flex items-center gap-2">
+               <Sun className="w-8 h-8" strokeWidth={2.5} />
+               Oleg Weather
+             </h2>
+             <div className="text-2xl font-semibold opacity-90 mb-6 drop-shadow-sm">{weather.city}</div>
+
+             <div className="flex flex-col items-center justify-center mb-8 relative z-10">
+                <span className="text-[120px] leading-none font-bold tracking-tighter drop-shadow-xl">
+                  {formatRawTemp(weather.current.temp)}
+                </span>
+                <span className="text-2xl font-medium mt-2 capitalize opacity-95 drop-shadow-md">
+                   {weather.current.description}
+                </span>
+             </div>
+
+             <div className="flex gap-6 text-lg font-semibold opacity-95 bg-white/20 px-8 py-3 rounded-full backdrop-blur-md shadow-lg border border-white/20">
+                <span>Макс: {formatRawTemp(weather.current.temp_max)}</span>
+                <span>Мин: {formatRawTemp(weather.current.temp_min)}</span>
+             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Share Toast */}
+      <AnimatePresence>
+        {shareMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 font-bold text-sm rounded-full shadow-2xl z-50 flex items-center gap-2"
+          >
+            <Share2 className="w-4 h-4" />
+            {shareMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Footer */}
       <footer className="max-w-4xl w-full mx-auto text-center mt-12 mb-4 pt-6 border-t border-slate-100 dark:border-slate-800/50" id="app-footer">
         <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
-          Погода в реальном времени • Aura Weather © 2026
+          Погода в реальном времени • Oleg Weather © 2026
         </p>
       </footer>
     </div>
