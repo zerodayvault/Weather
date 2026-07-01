@@ -70,9 +70,9 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
                 </p>
               </div>
 
-              <div className="my-0 sm:my-3.5 flex items-center gap-2 sm:gap-3 sm:flex-col flex-1 min-w-0 justify-center">
+              <div className="my-0 sm:my-3.5 flex items-center justify-center sm:flex-col flex-1">
                 <WeatherIcon conditionCode={day.conditionCode} className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 drop-shadow-[0_4px_6px_rgba(0,0,0,0.05)]" />
-                <span className="text-[11px] text-slate-550 dark:text-slate-400 max-w-full truncate sm:mt-1 font-bold leading-relaxed text-center">
+                <span className="hidden sm:block text-[11px] text-slate-550 dark:text-slate-400 max-w-full truncate sm:mt-1 font-bold leading-relaxed text-center">
                   {day.description}
                 </span>
               </div>
@@ -142,9 +142,9 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
                     </div>
 
                     {/* Condition Icon + Label */}
-                    <div className="flex-1 flex items-center gap-3">
+                    <div className="flex-1 flex items-center gap-3 min-w-0">
                       <WeatherIcon conditionCode={day.conditionCode} className="w-8 h-8 shrink-0" />
-                      <span className="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline font-medium max-w-[150px] truncate">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline font-medium truncate">
                         {day.description}
                       </span>
                     </div>
