@@ -166,7 +166,7 @@ export default function SearchAutocomplete({ onSearch }: SearchAutocompleteProps
       {isFocused && (suggestions.length > 0 || history.length > 0 || isLoading) && (
         <div 
           id="autocomplete-dropdown"
-          className="absolute w-full mt-2 glass-card rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 theme-transition"
+          className="absolute w-full mt-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 theme-transition"
         >
           {isLoading && (
             <div className="px-4 py-3 text-sm text-slate-400 dark:text-slate-500 flex items-center gap-2">
