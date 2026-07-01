@@ -1,0 +1,6 @@
+{
+  "name": "Minimalist Weather",
+  "description": "An elegant, minimalist weather forecast application with search autocomplete, persistent locations, light/dark theme, and 3-to-7-day forecasts, powered by OpenWeatherMap and Gemini AI fallback.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
