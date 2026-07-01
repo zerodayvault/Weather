@@ -35,7 +35,7 @@ export default function SavedLocations({ saved, activeCity, onSelect, onRemove }
               className={`group flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full border transition-all text-xs font-extrabold cursor-pointer theme-transition uppercase tracking-wider ${
                 isActive
                   ? "bg-gradient-to-tr from-blue-500 to-indigo-600 border-transparent text-white shadow-md shadow-blue-500/20"
-                  : "bg-slate-100/60 dark:bg-slate-900/40 border-slate-200/40 dark:border-white/5 text-slate-650 dark:text-slate-350 hover:border-slate-300 dark:hover:border-white/10 hover:bg-slate-100 dark:hover:bg-slate-900/60"
+                  : "bg-slate-100/80 dark:bg-slate-800/80 border-slate-200/60 dark:border-white/10 text-slate-650 dark:text-slate-300 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-200 dark:hover:bg-slate-700/80"
               }`}
               onClick={() => onSelect(city)}
             >

@@ -7,7 +7,8 @@ import {
   Heart, 
   AlertCircle,
   HelpCircle,
-  Activity
+  Activity,
+  CloudLightning
 } from "lucide-react";
 import { WeatherData } from "./types";
 import { fetchWeatherFromClient } from "./utils/weatherClientFallback";
@@ -150,25 +151,25 @@ export default function App() {
       {/* Top Navbar */}
       <header className="max-w-4xl w-full mx-auto flex items-center justify-between mb-8 relative z-10" id="app-header">
         <div className="flex items-center gap-2.5" id="logo-container">
-          <div className="p-2.5 bg-gradient-to-tr from-sky-400 via-blue-500 to-indigo-600 rounded-[18px] shadow-lg shadow-blue-500/10 text-white shrink-0">
-            <Sun className="w-5 h-5 animate-pulse" />
+          <div className="p-2 bg-gradient-to-br from-[#00c6ff] to-[#0072ff] rounded-full shadow-lg shadow-blue-500/30 text-white shrink-0">
+            <Sun className="w-5 h-5" strokeWidth={2.5} />
           </div>
           <span className="font-extrabold text-lg tracking-widest font-sans text-slate-800 dark:text-white theme-transition uppercase">
-            Aura Weather
+            Oleg Weather
           </span>
         </div>
 
         {/* Action Controls */}
         <div className="flex items-center gap-3" id="header-controls">
           {/* Unit Toggle */}
-          <div className="flex items-center bg-white/40 dark:bg-white/10 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl p-1 shadow-sm theme-transition">
+          <div className="flex items-center bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border border-white/80 dark:border-slate-700/80 rounded-2xl p-1 shadow-sm theme-transition">
             <button
               onClick={() => setUnit("C")}
               id="toggle-celsius-btn"
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 unit === "C"
-                  ? "bg-white/90 dark:bg-white/20 text-blue-600 dark:text-white shadow-sm"
-                  : "text-slate-500 hover:text-slate-850 dark:text-slate-300 dark:hover:text-white"
+                  ? "bg-white/95 dark:bg-slate-600/90 text-blue-600 dark:text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-850 dark:text-slate-400 dark:hover:text-white"
               }`}
             >
               °C
@@ -178,8 +179,8 @@ export default function App() {
               id="toggle-fahrenheit-btn"
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 unit === "F"
-                  ? "bg-white/90 dark:bg-white/20 text-blue-600 dark:text-white shadow-sm"
-                  : "text-slate-500 hover:text-slate-850 dark:text-slate-300 dark:hover:text-white"
+                  ? "bg-white/95 dark:bg-slate-600/90 text-blue-600 dark:text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-850 dark:text-slate-400 dark:hover:text-white"
               }`}
             >
               °F
@@ -190,7 +191,7 @@ export default function App() {
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             id="toggle-theme-btn"
-            className="p-3 bg-white/40 dark:bg-white/10 backdrop-blur-xl border border-white/40 dark:border-white/10 text-slate-600 dark:text-slate-350 hover:text-slate-900 dark:hover:text-white rounded-2xl shadow-sm hover:shadow-md transition-all theme-transition"
+            className="p-3 bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border border-white/80 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-2xl shadow-sm hover:shadow-md transition-all theme-transition"
             title={theme === "light" ? "Включить темную тему" : "Включить светлую тему"}
           >
             {theme === "light" ? <Moon className="w-4.5 h-4.5" /> : <Sun className="w-4.5 h-4.5 text-amber-400" />}
@@ -298,7 +299,7 @@ export default function App() {
                     <button
                       onClick={handleToggleSave}
                       id="favorite-toggle-btn"
-                      className="p-2.5 rounded-full bg-white/40 hover:bg-white/60 dark:bg-white/5 dark:hover:bg-white/10 border border-white/40 dark:border-white/5 transition-all group shadow-sm active:scale-95 duration-200"
+                      className="p-2.5 rounded-full bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/60 dark:border-slate-700/50 transition-all group shadow-sm active:scale-95 duration-200"
                       title={isSaved(weather.city) ? "Удалить из избранного" : "Добавить в избранное"}
                     >
                       <Heart 
@@ -311,7 +312,7 @@ export default function App() {
                     </button>
 
                     {/* Today badge centered on iOS style */}
-                    <span className="px-3 py-1 bg-slate-500/10 dark:bg-white/5 border border-slate-500/10 dark:border-white/5 text-slate-550 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-full select-none">
+                    <span className="px-3 py-1 bg-slate-500/10 dark:bg-slate-800/60 border border-slate-500/10 dark:border-slate-700/50 text-slate-550 dark:text-slate-300 text-[10px] font-black uppercase tracking-widest rounded-full select-none shadow-sm backdrop-blur-md">
                       {new Date().toLocaleDateString("ru-RU", { weekday: "short", day: "numeric", month: "short" })}
                     </span>
 
@@ -319,7 +320,7 @@ export default function App() {
                     <button
                       onClick={() => fetchWeather(weather.city)}
                       id="refresh-weather-btn"
-                      className="p-2.5 bg-white/40 hover:bg-white/60 dark:bg-white/5 dark:hover:bg-white/10 border border-white/40 dark:border-white/5 text-slate-550 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-full shadow-sm active:scale-95 transition-all duration-300"
+                      className="p-2.5 rounded-full bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/60 dark:border-slate-700/50 text-slate-550 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-sm active:scale-95 transition-all duration-300"
                       title="Обновить данные"
                     >
                       <RefreshCw className="w-4.5 h-4.5 active:rotate-180 transition-transform duration-500" />

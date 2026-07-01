@@ -121,7 +121,7 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
         <button
           onClick={() => setShowAllSeven(!showAllSeven)}
           id="toggle-extended-forecast-btn"
-          className="w-full py-3 bg-slate-100/80 hover:bg-slate-200/50 dark:bg-slate-900/40 dark:hover:bg-slate-900/60 border border-slate-200/40 dark:border-white/5 rounded-full flex items-center justify-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-350 hover:text-slate-800 dark:hover:text-white transition-all uppercase tracking-widest active:scale-[0.98] shadow-sm"
+          className="w-full py-3 bg-slate-100/80 hover:bg-slate-200/50 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 border border-slate-200/40 dark:border-white/10 rounded-full flex items-center justify-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white transition-all uppercase tracking-widest active:scale-[0.98] shadow-sm"
         >
           {showAllSeven ? (
             <>
@@ -143,12 +143,14 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden mt-4 glass-card rounded-[32px] p-4 sm:p-6"
+              transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+              className="overflow-hidden"
             >
-              <h4 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4">
-                Прогноз на 7 дней
-              </h4>
+              <div className="pt-4">
+                <div className="glass-card rounded-[32px] p-4 sm:p-6">
+                <h4 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4">
+                  Прогноз на 7 дней
+                </h4>
 
               <div className="divide-y divide-slate-100 dark:divide-slate-700/50" id="extended-forecast-list">
                 {sevenDayForecast.map((day, idx) => (
@@ -187,6 +189,8 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
                     </div>
                   </div>
                 ))}
+              </div>
+              </div>
               </div>
             </motion.div>
           )}

@@ -143,7 +143,7 @@ export default function SearchAutocomplete({ onSearch }: SearchAutocompleteProps
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setIsFocused(true)}
             placeholder="Поиск города..."
-            className="w-full pl-11 pr-10 py-3 bg-slate-100/80 dark:bg-slate-900/50 backdrop-blur-xl border border-slate-200/50 dark:border-white/5 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-full shadow-sm focus:bg-white dark:focus:bg-slate-900/90 transition-all focus:outline-none focus:ring-2 focus:ring-slate-300/40 dark:focus:ring-white/10 text-base font-medium theme-transition"
+            className="w-full pl-11 pr-10 py-3 bg-slate-100/90 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-white/10 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-full shadow-sm focus:bg-white dark:focus:bg-slate-900/95 transition-all focus:outline-none focus:ring-2 focus:ring-slate-300/40 dark:focus:ring-white/20 text-base font-medium theme-transition"
             autoComplete="off"
           />
           <div className="absolute left-4 text-slate-400 dark:text-slate-500">
@@ -166,7 +166,7 @@ export default function SearchAutocomplete({ onSearch }: SearchAutocompleteProps
       {isFocused && (suggestions.length > 0 || history.length > 0 || isLoading) && (
         <div 
           id="autocomplete-dropdown"
-          className="absolute w-full mt-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 theme-transition"
+          className="absolute z-50 w-full mt-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 theme-transition"
         >
           {isLoading && (
             <div className="px-4 py-3 text-sm text-slate-400 dark:text-slate-500 flex items-center gap-2">
