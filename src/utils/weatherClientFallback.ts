@@ -46,7 +46,8 @@ function getWmoDescription(code: number): string {
     96: "гроза с небольшим градом",
     99: "сильная гроза с градом"
   };
-  return mapping[code] || "переменная облачность";
+  const desc = mapping[code] || "переменная облачность";
+  return desc.charAt(0).toUpperCase() + desc.slice(1);
 }
 
 // Format ISO8601 time string to HH:MM (local time representation)

@@ -61,8 +61,8 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
               {/* Card micro-glow */}
               <div className="absolute -right-12 -bottom-12 w-28 h-28 bg-blue-500/5 dark:bg-sky-500/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
 
-              <div className="text-left sm:text-center">
-                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-widest">
+              <div className="text-left sm:text-center w-24 sm:w-auto shrink-0">
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-widest block truncate">
                   {index === 0 ? "Сегодня" : index === 1 ? "Завтра" : getFullDayName(day.dayName)}
                 </span>
                 <p className="text-sm font-black text-slate-800 dark:text-white sm:mt-0.5 font-sans">
@@ -70,18 +70,18 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
                 </p>
               </div>
 
-              <div className="my-0 sm:my-3.5 flex items-center gap-3 sm:flex-col">
-                <WeatherIcon conditionCode={day.conditionCode} className="w-12 h-12 drop-shadow-[0_4px_6px_rgba(0,0,0,0.05)]" />
-                <span className="text-[11px] text-slate-550 dark:text-slate-400 max-w-[130px] line-clamp-1 capitalize sm:mt-1 font-bold leading-relaxed">
+              <div className="my-0 sm:my-3.5 flex items-center gap-2 sm:gap-3 sm:flex-col flex-1 min-w-0 justify-center">
+                <WeatherIcon conditionCode={day.conditionCode} className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 drop-shadow-[0_4px_6px_rgba(0,0,0,0.05)]" />
+                <span className="text-[11px] text-slate-550 dark:text-slate-400 max-w-full truncate sm:mt-1 font-bold leading-relaxed text-center">
                   {day.description}
                 </span>
               </div>
 
-              <div className="text-right sm:text-center">
+              <div className="text-right sm:text-center w-20 sm:w-auto shrink-0 flex items-baseline sm:block justify-end gap-1.5 sm:gap-0">
                 <span className="text-lg font-black text-slate-800 dark:text-white font-sans tracking-tight">
                   {formatTemp(day.temp_day)}
                 </span>
-                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 ml-2">
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500">
                   {formatTemp(day.temp_night)}
                 </span>
               </div>
@@ -144,7 +144,7 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
                     {/* Condition Icon + Label */}
                     <div className="flex-1 flex items-center gap-3">
                       <WeatherIcon conditionCode={day.conditionCode} className="w-8 h-8 shrink-0" />
-                      <span className="text-xs text-slate-500 dark:text-slate-400 capitalize hidden sm:inline font-medium max-w-[150px] truncate">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline font-medium max-w-[150px] truncate">
                         {day.description}
                       </span>
                     </div>

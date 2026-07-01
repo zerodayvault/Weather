@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { toPng } from "html-to-image";
 import { 
   Sun, 
   Moon, 
@@ -28,7 +27,6 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [shareMessage, setShareMessage] = useState<string | null>(null);
   const weatherCardRef = useRef<HTMLDivElement>(null);
-  const shareCardRef = useRef<HTMLDivElement>(null);
   const [unit, setUnit] = useState<"C" | "F">("C");
 
   // Load Saved Cities
@@ -146,32 +144,30 @@ export default function App() {
   const handleShare = async () => {
     if (!weather) return;
 
-    // Generate Text Summary
-    const textSummary = `Погода: ${weather.city}, ${formatRawTemp(weather.current.temp)}${unit}, ${weather.current.conditionCode}`;
+    const url = window.location.href;
+    const shareText = `Погода в городе ${weather.city}: ${formatRawTemp(weather.current.temp)}${unit}, ${weather.current.description}. Смотреть подробнее: ${url}`;
     
     try {
-      await navigator.clipboard.writeText(textSummary);
-    } catch (err) {
-      console.warn("Failed to copy text", err);
-    }
-
-    // Generate PNG
-    if (shareCardRef.current) {
-      try {
-        const dataUrl = await toPng(shareCardRef.current, {
-          quality: 0.95,
+      if (navigator.share) {
+        await navigator.share({
+          title: `Погода: ${weather.city}`,
+          text: `Погода в городе ${weather.city}: ${formatRawTemp(weather.current.temp)}${unit}, ${weather.current.description}.`,
+          url: url,
         });
-        const link = document.createElement("a");
-        link.download = `oleg-weather-${weather.city.toLowerCase()}.png`;
-        link.href = dataUrl;
-        link.click();
-        
-        setShareMessage("Картинка и текст скопированы!");
+      } else {
+        await navigator.clipboard.writeText(shareText);
+        setShareMessage("Ссылка скопирована!");
         setTimeout(() => setShareMessage(null), 3000);
-      } catch (err) {
-        console.error("Failed to generate image", err);
-        setShareMessage("Текст скопирован!");
-        setTimeout(() => setShareMessage(null), 3000);
+      }
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        try {
+           await navigator.clipboard.writeText(shareText);
+           setShareMessage("Ссылка скопирована!");
+           setTimeout(() => setShareMessage(null), 3000);
+        } catch (fallbackErr) {
+           console.warn("Failed to copy text", fallbackErr);
+        }
       }
     }
   };
@@ -333,7 +329,7 @@ export default function App() {
                   }`}></div>
 
                   {/* Top Corner Quick Action Controls */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between w-[calc(100%-32px)] z-20">
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                     {/* Favorite toggle on the left */}
                     <button
                       onClick={handleToggleSave}
@@ -351,7 +347,7 @@ export default function App() {
                     </button>
 
                     {/* Today badge centered on iOS style */}
-                    <span className="px-3 py-1 bg-slate-500/10 dark:bg-slate-800/60 border border-slate-500/10 dark:border-slate-700/50 text-slate-550 dark:text-slate-300 text-[10px] font-black uppercase tracking-widest rounded-full select-none shadow-sm backdrop-blur-md">
+                    <span className="absolute left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-500/10 dark:bg-slate-800/60 border border-slate-500/10 dark:border-slate-700/50 text-slate-550 dark:text-slate-300 text-[10px] font-black uppercase tracking-widest rounded-full select-none shadow-sm backdrop-blur-md">
                       {new Date().toLocaleDateString("ru-RU", { weekday: "short", day: "numeric", month: "short" })}
                     </span>
 
@@ -401,7 +397,7 @@ export default function App() {
                     </div>
 
                     {/* Condition details */}
-                    <p className="text-base sm:text-lg font-medium text-slate-700 dark:text-slate-200 capitalize mt-1 leading-snug">
+                    <p className="text-base sm:text-lg font-medium text-slate-700 dark:text-slate-200 mt-1 leading-snug">
                       {weather.current.description}
                     </p>
 
@@ -432,40 +428,6 @@ export default function App() {
           </AnimatePresence>
         </div>
       </main>
-
-      {/* Hidden 1x1 Share Element */}
-      {weather && (
-        <div className="fixed top-[-9999px] left-[-9999px] pointer-events-none z-[-1000]">
-          <div 
-            ref={shareCardRef}
-            className="w-[500px] h-[500px] bg-gradient-to-br from-[#00c6ff] to-[#0072ff] flex flex-col items-center justify-center text-white relative overflow-hidden font-sans"
-          >
-             {/* Background flares */}
-             <div className="absolute top-[-20%] right-[-10%] w-[70%] h-[70%] bg-white/20 blur-[80px] rounded-full"></div>
-             <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-400/30 blur-[60px] rounded-full"></div>
-
-             <h2 className="text-3xl font-extrabold uppercase tracking-widest mb-1 opacity-90 drop-shadow-sm flex items-center gap-2">
-               <Sun className="w-8 h-8" strokeWidth={2.5} />
-               Oleg Weather
-             </h2>
-             <div className="text-2xl font-semibold opacity-90 mb-6 drop-shadow-sm">{weather.city}</div>
-
-             <div className="flex flex-col items-center justify-center mb-8 relative z-10">
-                <span className="text-[120px] leading-none font-bold tracking-tighter drop-shadow-xl">
-                  {formatRawTemp(weather.current.temp)}
-                </span>
-                <span className="text-2xl font-medium mt-2 capitalize opacity-95 drop-shadow-md">
-                   {weather.current.description}
-                </span>
-             </div>
-
-             <div className="flex gap-6 text-lg font-semibold opacity-95 bg-white/20 px-8 py-3 rounded-full backdrop-blur-md shadow-lg border border-white/20">
-                <span>Макс: {formatRawTemp(weather.current.temp_max)}</span>
-                <span>Мин: {formatRawTemp(weather.current.temp_min)}</span>
-             </div>
-          </div>
-        </div>
-      )}
 
       {/* Share Toast */}
       <AnimatePresence>
