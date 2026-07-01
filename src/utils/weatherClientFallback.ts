@@ -69,7 +69,7 @@ async function checkVpnRequired(): Promise<void> {
     if (res.ok) {
       const data = await res.json();
       if (data.country === "RU" || data.country === "BY") {
-        throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокирровки.");
+        throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокировки.");
       }
     }
   } catch (err) {
@@ -92,7 +92,7 @@ export async function fetchAutocompleteFromClient(query: string): Promise<CitySu
   
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокирровки.");
+    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокировки.");
   }
   
   const data = await response.json();
@@ -115,7 +115,7 @@ export async function fetchWeatherFromClient(city: string): Promise<WeatherData>
   const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city.trim())}&count=1&language=ru&format=json`;
   const geoRes = await fetch(geoUrl);
   if (!geoRes.ok) {
-    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокирровки.");
+    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокировки.");
   }
 
   const geoData = await geoRes.json();
@@ -133,7 +133,7 @@ export async function fetchWeatherFromClient(city: string): Promise<WeatherData>
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,cloud_cover,visibility&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum&wind_speed_unit=ms&timezone=auto`;
   const weatherRes = await fetch(weatherUrl);
   if (!weatherRes.ok) {
-    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокирровки.");
+    throw new Error("К сожалению в вашем регионе проблемы с доступом к метеоданным. Пожалуйста, включите VPN для обхода блокировки.");
   }
 
   const weatherData = await weatherRes.json();

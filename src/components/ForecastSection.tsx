@@ -39,32 +39,6 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
   // 7-day subset
   const sevenDayForecast = forecast.slice(0, 7);
 
-  // Calculate global min and max temp in forecast to scale temperature range bars
-  const temps = forecast.map(d => [d.temp_day, d.temp_night]).flat();
-  const globalMin = Math.min(...temps);
-  const globalMax = Math.max(...temps);
-  const globalRange = globalMax - globalMin || 1;
-
-  // Render a nice visual temperature progress bar, like in iOS Weather app
-  const renderTempBar = (min: number, max: number) => {
-    const leftPercent = ((min - globalMin) / globalRange) * 100;
-    const widthPercent = ((max - min) / globalRange) * 100;
-
-    return (
-      <div className="relative w-28 h-2.5 bg-slate-200/40 dark:bg-slate-850/60 rounded-full overflow-hidden shrink-0 border border-slate-100/10">
-        <div
-          className="absolute h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-amber-400"
-          style={{
-            left: `${Math.max(0, leftPercent)}%`,
-            width: `${Math.max(12, widthPercent)}%`,
-          }}
-        />
-        {/* Subtle dot helper on current relative position */}
-        <div className="absolute top-1/2 left-[50%] -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full border border-sky-500 shadow-sm pointer-events-none opacity-40"></div>
-      </div>
-    );
-  };
-
   return (
     <div className="space-y-6" id="forecast-section">
       {/* 3-Day Forecast Section */}
@@ -175,17 +149,9 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
                       </span>
                     </div>
 
-                    {/* Temp visual range bar */}
-                    <div className="hidden sm:flex items-center gap-3">
-                      <span className="text-xs text-slate-400 font-semibold">{formatTemp(day.temp_night)}</span>
-                      {renderTempBar(day.temp_night, day.temp_day)}
-                      <span className="text-xs text-slate-700 dark:text-slate-300 font-bold w-6 text-right">{formatTemp(day.temp_day)}</span>
-                    </div>
-
-                    {/* Simple fallback mobile temperature display */}
-                    <div className="sm:hidden flex items-center justify-end font-semibold">
+                    <div className="flex items-center justify-end gap-3 font-semibold w-24">
+                      <span className="text-slate-400 dark:text-slate-500 text-xs">{formatTemp(day.temp_night)}</span>
                       <span className="text-slate-800 dark:text-slate-100 font-bold">{formatTemp(day.temp_day)}</span>
-                      <span className="text-slate-400 dark:text-slate-500 ml-2 text-xs">{formatTemp(day.temp_night)}</span>
                     </div>
                   </div>
                 ))}

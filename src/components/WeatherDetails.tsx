@@ -115,7 +115,7 @@ export default function WeatherDetails({ current, unit }: WeatherDetailsProps) {
       label: "Осадки / Т. Росы",
       value: `${current.precipitation} мм`,
       desc: `Точка росы: ${formatTemp(current.dew_point)}`,
-      span: "col-span-1 md:col-span-2",
+      span: "col-span-2 md:col-span-2",
       glowColor: "group-hover:bg-cyan-500/10"
     },
   ];
