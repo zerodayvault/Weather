@@ -1,6 +1,7 @@
 {
   "name": "react-example",
   "private": true,
+  "homepage": "https://zerodayvault.github.io/aura_weather",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
