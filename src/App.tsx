@@ -178,7 +178,7 @@ export default function App() {
 
   return (
     <div 
-      className="min-h-screen theme-transition bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-[#0f172a] dark:via-[#131b2e] dark:to-[#1e1b4b] text-slate-800 dark:text-slate-100 flex flex-col px-4 sm:px-6 py-6 relative overflow-hidden"
+      className="min-h-screen theme-transition bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-[#0f172a] dark:via-[#131b2e] dark:to-[#1e1b4b] text-slate-800 dark:text-slate-100 flex flex-col px-3 sm:px-6 py-4 sm:py-6 relative overflow-hidden"
       id="app-root"
     >
       {/* Mesh Gradient Background Elements */}
@@ -311,7 +311,7 @@ export default function App() {
                 <div 
                   id="main-weather-card"
                   ref={weatherCardRef}
-                  className="pt-10 pb-12 px-6 sm:px-10 glass-card rounded-[36px] shadow-xl relative overflow-hidden theme-transition border-t-0 flex flex-col items-center justify-center text-center group"
+                  className="pt-8 sm:pt-10 pb-10 sm:pb-12 px-4 sm:px-10 glass-card rounded-[32px] sm:rounded-[36px] shadow-xl relative overflow-hidden theme-transition border-t-0 flex flex-col items-center justify-center text-center group"
                 >
                   {/* Dynamic Apple-style weather background glow */}
                   <div className={`absolute inset-0 opacity-80 dark:opacity-40 transition-all duration-700 ${
@@ -388,14 +388,14 @@ export default function App() {
                       <h2 className="text-3xl sm:text-4xl font-semibold text-slate-800 dark:text-white font-sans tracking-tight">
                         {weather.city}
                       </h2>
-                      <span className="text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                      <span className="text-[11px] sm:text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
                         {weather.country}
                       </span>
                     </div>
 
                     {/* Massive Temperature display */}
                     <div className="relative my-2">
-                      <span className="text-[84px] sm:text-[98px] font-thin text-slate-800 dark:text-white font-sans tracking-tighter leading-none block pl-4">
+                      <span className="text-[72px] sm:text-[98px] font-thin text-slate-800 dark:text-white font-sans tracking-tighter leading-none block pl-3 sm:pl-4">
                         {formatRawTemp(weather.current.temp)}
                       </span>
                     </div>
@@ -406,14 +406,14 @@ export default function App() {
                     </p>
 
                     {/* High & Low Temp */}
-                    <div className="flex items-center gap-3 mt-2 text-sm sm:text-base font-bold text-slate-450 dark:text-slate-400">
+                    <div className="flex items-center gap-2 sm:gap-3 mt-2 text-xs sm:text-base font-bold text-slate-450 dark:text-slate-400">
                       <span>Макс: {formatRawTemp(weather.current.temp_max)}</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-750"></span>
+                      <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-slate-300 dark:bg-slate-750"></span>
                       <span>Мин: {formatRawTemp(weather.current.temp_min)}</span>
                     </div>
 
                     {/* Feels like */}
-                    <span className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mt-2">
+                    <span className="text-[11px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mt-2">
                       Ощущается как {formatRawTemp(weather.current.feels_like)}
                     </span>
                   </div>

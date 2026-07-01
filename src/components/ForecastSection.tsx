@@ -82,7 +82,7 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="p-6 glass-card rounded-[32px] flex sm:flex-col items-center justify-between sm:justify-center text-center theme-transition shadow-md hover:shadow-xl hover:scale-[1.015] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group"
+              className="p-5 sm:p-6 glass-card rounded-[28px] sm:rounded-[32px] flex sm:flex-col items-center justify-between sm:justify-center text-center theme-transition shadow-md hover:shadow-xl hover:scale-[1.015] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group"
             >
               {/* Card micro-glow */}
               <div className="absolute -right-12 -bottom-12 w-28 h-28 bg-blue-500/5 dark:bg-sky-500/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
@@ -176,14 +176,14 @@ export default function ForecastSection({ forecast, unit }: ForecastSectionProps
                     </div>
 
                     {/* Temp visual range bar */}
-                    <div className="hidden xs:flex items-center gap-3">
+                    <div className="hidden sm:flex items-center gap-3">
                       <span className="text-xs text-slate-400 font-semibold">{formatTemp(day.temp_night)}</span>
                       {renderTempBar(day.temp_night, day.temp_day)}
                       <span className="text-xs text-slate-700 dark:text-slate-300 font-bold w-6 text-right">{formatTemp(day.temp_day)}</span>
                     </div>
 
                     {/* Simple fallback mobile temperature display */}
-                    <div className="xs:hidden text-right font-semibold">
+                    <div className="sm:hidden flex items-center justify-end font-semibold">
                       <span className="text-slate-800 dark:text-slate-100 font-bold">{formatTemp(day.temp_day)}</span>
                       <span className="text-slate-400 dark:text-slate-500 ml-2 text-xs">{formatTemp(day.temp_night)}</span>
                     </div>

@@ -65,7 +65,7 @@ export default function HourlyForecastChart({ hourly, unit }: HourlyForecastChar
 
   return (
     <div 
-      className="p-6 sm:p-8 glass-card rounded-[40px] shadow-2xl relative overflow-hidden theme-transition"
+      className="p-5 sm:p-8 glass-card rounded-[32px] sm:rounded-[40px] shadow-2xl relative overflow-hidden theme-transition"
       id="hourly-forecast-card"
     >
       <div className="flex items-center justify-between mb-6">

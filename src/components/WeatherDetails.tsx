@@ -121,12 +121,12 @@ export default function WeatherDetails({ current, unit }: WeatherDetailsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6" id="weather-details-grid">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6" id="weather-details-grid">
       {details.map((detail) => (
         <div
           key={detail.id}
           id={detail.id}
-          className={`p-5 sm:p-6 glass-card rounded-[28px] flex flex-col justify-between theme-transition shadow-md hover:shadow-xl hover:scale-[1.015] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group ${detail.span}`}
+          className={`p-4 sm:p-6 glass-card rounded-[24px] sm:rounded-[28px] flex flex-col justify-between theme-transition shadow-md hover:shadow-xl hover:scale-[1.015] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group ${detail.span}`}
         >
           {/* Subtle background glow effect on hover */}
           <div className={`absolute -right-8 -bottom-8 w-24 h-24 rounded-full blur-2xl transition-all duration-500 pointer-events-none ${detail.glowColor || "group-hover:bg-blue-500/5"}`}></div>
